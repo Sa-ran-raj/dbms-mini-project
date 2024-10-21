@@ -9,72 +9,162 @@
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #f2f8eecf 0%, #eef4f0 100%); /* Gradient background */
-            color: #ffffff; /* White text for contrast */
-            
-            flex-direction: column;
+            background: linear-gradient(125deg, #0e0d0d8e 5%, #000000 100%);
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 20px;
         }
 
+        /* Flex container for profile and notes */
+        .content-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        /* User Info Container */
         .container {
-            max-width: 600px;
-            margin: 50px auto;
+            flex: 1;
+            max-width: 45%;
+            margin-right: 20px;
             padding: 20px;
             border-radius: 10px;
-            background-color: rgb(255, 255, 255); /* Semi-transparent white background */
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            text-align: center; /* Center the text */
+            background-color: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 30px rgba(0, 123, 255, 0.6), 0 0 20px rgba(0, 123, 255, 0.4), 0 0 40px rgba(0, 123, 255, 0.3);
+            text-align: center;
         }
 
         h2 {
-            color: #007bff;
+            color: #0b1703;
             margin-bottom: 20px;
-            font-family: 'Georgia', serif; /* Nice font for the heading */
+            font-family: 'Georgia', serif;
         }
 
         .profile-img {
             width: 150px;
             height: 150px;
-            border-radius: 50%; /* Circular shape */
-            object-fit: cover; /* Maintain aspect ratio */
-            border: 3px solid #007bff; /* Optional border */
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #0a080a9e;
         }
 
         p {
             margin: 15px 0;
-            font-family: 'Arial', sans-serif; /* Nice font for paragraphs */
-            color: #333; /* Dark color for better readability */
+            font-family: 'Arial', sans-serif;
+            color: #333;
         }
 
-        a {
-            text-decoration: none;
-            color: #007bff;
-            font-weight: bold; /* Bold text for links */
+        /* Style for the logout button */
+        .logout-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
         }
 
-        a:hover {
-            text-decoration: underline;
+        .logout-btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* Notes Container */
+        .notes-container {
+            flex: 1;
+            max-width: 45%;
+            margin-left: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 20px rgba(0, 255, 100, 0.5);
+            color: #333;
+            height: 75%;
+        }
+
+        .notes-container h3 {
+            color: #004d00;
+            font-family: 'Georgia', serif;
+            margin-bottom: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            height: calc(100% - 60px);
+            padding: 10px -5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+            resize: none;
+        }
+
+        .save-btn {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .save-btn:hover {
+            background-color: #218838;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .content-wrapper {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .container, .notes-container {
+                max-width: 100%;
+                margin: 0 0 20px;
+            }
+
+            .notes-container {
+                height: auto;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>Welcome, {{ user.name }}!</h2>
+    <div class="content-wrapper">
+        <div class="container">
+            <h2>Welcome👋, {{ user.name }}!</h2>
 
-        <!-- Check if the user has uploaded a profile photo -->
-        {% if user.photo %}
-            <img src="/static/uploads/{{ user.photo }}" alt="Profile Photo" class="profile-img"><br>
-        {% else %}
-            <img src="/static/default_profile.png" alt="Default Profile Photo" class="profile-img"><br>
-        {% endif %}
+            {% if user.photo %}
+                <img src="/static/uploads/{{ user.photo }}" alt="Profile Photo" class="profile-img"><br>
+            {% else %}
+                <img src="/static/default_profile.png" alt="Default Profile Photo" class="profile-img"><br>
+            {% endif %}
 
-        <p>Email: {{ user.email }}</p>
-        <p>Mobile: {{ user.mobile }}</p>
-        <p>Date of Birth: {{ user.dob }}</p>
-        <p>Age: {{ age }}</p> <!-- Display the user's age -->
-        <p>  dispaly age</p>
-        
-        <p><a href="/logout">Logout</a></p>
+            <p>Email📧: {{ user.email }}</p>
+            <p>Mobile📞: {{ user.mobile }}</p>
+            <p>Date of Birth📅: {{ user.dob }}</p>
+            <p>Age🧓: {{ age }}</p>
+
+            <!-- Logout form with POST request -->
+            <form action="/logout" method="POST">
+                <button type="submit" class="logout-btn">Logout</button>
+            </form>
+        </div>
+
+        <!-- Notes Container -->
+        <div class="notes-container">
+            <h3>Your Notes📝</h3>
+            <form action="/save_notes" method="POST">
+                <textarea name="notes" placeholder="Write your notes here...">{{ user.notes }}</textarea><br>
+                <button type="submit" class="save-btn">Save Notes</button>
+            </form>
+        </div>
     </div>
-   
 </body>
 </html>

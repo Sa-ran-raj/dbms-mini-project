@@ -93,7 +93,7 @@ def home():
 
     # Calculate age from date of birth
     if user.get('dob'):
-        dob = datetime.strptime(user['dob'], '%Y-%m-%d')  # Assuming DOB is stored in 'YYYY-MM-DD' format
+        dob = datetime.strptime(user['dob'], '%Y-%m-%d')
         today = datetime.today()
         age = today.year - dob.year - ((today.month, today.day) < (dob.month, dob.day))
     else:
@@ -101,9 +101,25 @@ def home():
 
     return render_template('home.html', user=user, age=age)
 
-@app.route('/logout')
+@app.route('/save_notes', methods=['POST'])
+def save_notes():
+    if 'email' not in session:
+        return redirect(url_for('login'))
+
+    notes = request.form['notes']
+    users.update_one(
+        {'email': session['email']},
+        {'$set': {'notes': notes}}  # Update the user's notes
+    )
+
+    flash('Notes saved successfully!')
+    return redirect(url_for('home'))
+
+# POST method for logout
+@app.route('/logout', methods=['POST'])
 def logout():
     session.pop('email', None)
+    flash('You have been logged out successfully.')
     return redirect(url_for('login'))
 
 if __name__ == '__main__':
