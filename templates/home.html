@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #f2f8eecf 0%, #eef4f0 100%); /* Gradient background */
+            color: #ffffff; /* White text for contrast */
+            
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: rgb(255, 255, 255); /* Semi-transparent white background */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center; /* Center the text */
+        }
+
+        h2 {
+            color: #007bff;
+            margin-bottom: 20px;
+            font-family: 'Georgia', serif; /* Nice font for the heading */
+        }
+
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%; /* Circular shape */
+            object-fit: cover; /* Maintain aspect ratio */
+            border: 3px solid #007bff; /* Optional border */
+        }
+
+        p {
+            margin: 15px 0;
+            font-family: 'Arial', sans-serif; /* Nice font for paragraphs */
+            color: #333; /* Dark color for better readability */
+        }
+
+        a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold; /* Bold text for links */
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Welcome, {{ user.name }}!</h2>
+
+        <!-- Check if the user has uploaded a profile photo -->
+        {% if user.photo %}
+            <img src="/static/uploads/{{ user.photo }}" alt="Profile Photo" class="profile-img"><br>
+        {% else %}
+            <img src="/static/default_profile.png" alt="Default Profile Photo" class="profile-img"><br>
+        {% endif %}
+
+        <p>Email: {{ user.email }}</p>
+        <p>Mobile: {{ user.mobile }}</p>
+        <p>Date of Birth: {{ user.dob }}</p>
+        <p>Age: {{ age }}</p> <!-- Display the user's age -->
+        
+        <p><a href="/logout">Logout</a></p>
+    </div>
+   
+</body>
+</html>
