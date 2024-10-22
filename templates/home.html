@@ -5,10 +5,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
     <style>
+        /* Navbar Styles */
+        .navbar {
+            background-color: lightcoral;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            position: absolute;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            font-family: 'Georgia', serif;
+        }
+
+        .navbar-left, .navbar-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-left img {
+            padding-left: 8px;
+            height: 30px;
+            margin-right: 16px;
+            border-radius: 45%;
+        }
+
+        .navbar-left a, .navbar-right a {
+            color: rgb(255, 255, 255);
+            padding: 10px;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .navbar-left a:hover, .navbar-right a:hover {
+            background-color: rgb(226, 6, 196);
+        }
+
+        .navbar-right a {
+            margin-left: 15px;
+        }
+
+        /* Content Wrapper */
         body {
             background: linear-gradient(125deg, rgba(14, 13, 13, 0.685) 55%, rgba(0, 0, 0, 0.9) 90%), url('{{ url_for('static', filename='bg.jpg') }}') no-repeat center center fixed;
-            background-size: cover ;
-            
+            background-size: cover;
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
@@ -17,7 +58,7 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            padding: 20px;
+            padding-top: 70px; /* Adjust for fixed navbar */
         }
 
         .content-wrapper {
@@ -37,6 +78,7 @@
             background-color: rgba(233, 225, 225, 0.963);
             box-shadow: 0 4px 30px rgba(0, 123, 255, 0.6), 0 0 20px rgba(0, 123, 255, 0.4), 0 0 40px rgba(0, 123, 255, 0.3);
             text-align: center;
+            height: 65vh;
         }
 
         h2 {
@@ -83,7 +125,7 @@
             background-color: rgba(255, 255, 255, 0.9);
             box-shadow: 0 4px 20px rgba(0, 255, 100, 0.5);
             color: #333;
-            height: 75%;
+            height: auto; /* Allow height to adjust */
         }
 
         .notes-container h3 {
@@ -94,12 +136,13 @@
 
         textarea {
             width: 100%;
-            height: calc(100% - 60px);
+            height: 120px; /* Adjusted height for better visibility */
             padding: 10px -5px;
             border-radius: 5px;
             border: 1px solid #ccc;
             margin-bottom: 20px;
             resize: none;
+            font-family: 'Arial', sans-serif; /* Added font-family for consistency */
         }
 
         .save-btn {
@@ -109,13 +152,19 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            font-size: 16px;
         }
 
         .save-btn:hover {
             background-color: #218838;
         }
 
+        /* Mobile Responsiveness */
         @media (max-width: 768px) {
+            .navbar-left, .navbar-right {
+                flex-direction: column;
+            }
+
             .content-wrapper {
                 flex-direction: column;
                 align-items: center;
@@ -123,16 +172,38 @@
 
             .container, .notes-container {
                 max-width: 100%;
-                margin: 0 0 20px;
+                margin: 20px 0;
             }
 
             .notes-container {
-                height: auto;
+                height: auto; /* Allowing height to adjust */
+            }
+
+            /* Fix the overlapping issue */
+            body {
+                padding-top: 200px; /* Adjust this to prevent navbar from overlapping content on smaller screens */
             }
         }
     </style>
 </head>
 <body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="navbar-left">
+            <img src="{{ url_for('static', filename='icon.jpg') }}" alt="Icon">
+            <a href="#">Domains</a>
+            <a href="#">Websites and Hosting</a>
+            <a href="#">Email</a>
+            <a href="#">Security</a>
+            <a href="#">Marketing</a>
+        </div>
+        <div class="navbar-right">
+            <a href="#">Contact Us</a>
+            <a href="#">Help</a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
     <div class="content-wrapper">
         <div class="container">
             <h2>Welcome👋, {{ user.name }}!</h2>
@@ -157,6 +228,7 @@
             <h3>Your Notes📝</h3>
             <form action="/save_notes" method="POST">
                 <textarea name="notes" placeholder="Write your notes here...">{{ user.notes }}</textarea><br>
+                <!-- The save button is inside the form, ensuring it is part of the notes container -->
                 <button type="submit" class="save-btn">Save Notes</button>
             </form>
         </div>
